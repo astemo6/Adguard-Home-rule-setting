@@ -1,7 +1,7 @@
 # Adguard Home rule setting
 Personalize Use
 
-1 2 3 三选一
+1 2 3 三选一 \
 1 Halflife规则	  合并自乘风视频广告过滤规则、Easylist、EasylistChina、EasyPrivacy、CJX'sAnnoyance，以及补充的一些规则 \
 https://raw.githubusercontent.com/o0HalfLife0o/list/master/ad-pc.txt	
 
@@ -11,7 +11,8 @@ https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-a
 3 Cats-Team/AdRules \
 https://raw.githubusercontent.com/Cats-Team/AdRules/main/dns.txt
 
-
+\
+\
 
 4 CJX'sAnnoyance \
 https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt
