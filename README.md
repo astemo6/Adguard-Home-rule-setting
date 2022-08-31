@@ -3,7 +3,7 @@ Personalize Use
 
 3.1 3.2二选一
 
-1) Halflife规则	  合并自乘风视频广告过滤规则、Easylist、EasylistChina、EasyPrivacy、CJX'sAnnoyance，以及补充的一些规则
+1) Halflife规则	  合并自乘风视频广告过滤规则、Easylist、EasylistChina、EasyPrivacy、CJX'sAnnoyance，以及补充的一些规则 \
 https://raw.githubusercontent.com/o0HalfLife0o/list/master/ad-pc.txt	
 
 2) I don't care about cookies	去除隐私、跟踪定位相关代码
