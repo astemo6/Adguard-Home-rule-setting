@@ -1,36 +1,27 @@
-bind_host: 0.0.0.0
-bind_port: 80
-beta_bind_port: 0
+http:
+  pprof:
+    port: 6060
+    enabled: false
+  address: 0.0.0.0:5590
+  session_ttl: 720h
 users:
-  - name: 7gPWZVygkABog9q8K
-    password: $2a$10$nuGZa1vxwD74NNEgKrP.m.37shVxe3B7tgtTZ3.xS1v/2u49Po1bm
+  - name: admin
+    password: $2a$10$JaPRtIqOpm1l6.Id9alHXOT/Q9dcKJ3Dvtko8NhZbnsC1MpPcW./O
 auth_attempts: 5
 block_auth_min: 15
 http_proxy: ""
-language: zh-cn
-debug_pprof: false
-web_session_ttl: 720
+language: ""
+theme: auto
 dns:
   bind_hosts:
     - 0.0.0.0
   port: 53
-  statistics_interval: 30
-  querylog_enabled: true
-  querylog_file_enabled: true
-  querylog_interval: 720h
-  querylog_size_memory: 1000
   anonymize_client_ip: false
-  protection_enabled: true
-  blocking_mode: default
-  blocking_ipv4: ""
-  blocking_ipv6: ""
-  blocked_response_ttl: 10
-  parental_block_host: family-block.dns.adguard.com
-  safebrowsing_block_host: standard-block.dns.adguard.com
   ratelimit: 0
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
+    - https://dns10.quad9.net/dns-query
     - 223.5.5.5
     - 119.29.29.29
     - 114.114.114.114
@@ -55,6 +46,7 @@ dns:
     - 149.112.112.10
     - 2620:fe::10
     - 2620:fe::fe:10
+  fallback_dns: []
   all_servers: false
   fastest_addr: false
   fastest_timeout: 1s
@@ -67,53 +59,61 @@ dns:
   trusted_proxies:
     - 127.0.0.0/8
     - ::1/128
-  cache_size: 83886079
-  cache_ttl_min: 2
-  cache_ttl_max: 86400
+  cache_size: 4194304
+  cache_ttl_min: 600
+  cache_ttl_max: 3600
   cache_optimistic: false
   bogus_nxdomain: []
   aaaa_disabled: false
-  enable_dnssec: false
-  edns_client_subnet: false
+  enable_dnssec: true
+  edns_client_subnet:
+    custom_ip: ""
+    enabled: true
+    use_custom: false
   max_goroutines: 300
   handle_ddr: true
   ipset: []
-  filtering_enabled: true
-  filters_update_interval: 24
-  parental_enabled: false
-  safesearch_enabled: false
-  safebrowsing_enabled: false
-  safebrowsing_cache_size: 1048576
-  safesearch_cache_size: 1048576
-  parental_cache_size: 1048576
-  cache_time: 30
-  rewrites: []
-  blocked_services: []
+  ipset_file: ""
+  bootstrap_prefer_ipv6: false
   upstream_timeout: 10s
   private_networks: []
   use_private_ptr_resolvers: true
   local_ptr_upstreams: []
+  use_dns64: false
+  dns64_prefixes: []
+  serve_http3: false
+  use_http3_upstreams: false
 tls:
   enabled: false
   server_name: ""
   force_https: false
   port_https: 443
   port_dns_over_tls: 853
-  port_dns_over_quic: 784
+  port_dns_over_quic: 853
   port_dnscrypt: 0
   dnscrypt_config_file: ""
   allow_unencrypted_doh: false
-  strict_sni_check: false
   certificate_chain: ""
   private_key: ""
   certificate_path: ""
   private_key_path: ""
+  strict_sni_check: false
+querylog:
+  ignored: []
+  interval: 168h
+  size_memory: 1000
+  enabled: true
+  file_enabled: true
+statistics:
+  ignored: []
+  interval: 168h
+  enabled: true
 filters:
   - enabled: false
     url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
     name: AdGuard DNS filter
     id: 1
-  - enabled: false
+  - enabled: true
     url: https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-easylist.txt
     name: anti-AD
     id: 1652091008
@@ -152,12 +152,16 @@ filters:
 whitelist_filters: []
 user_rules:
   - '@@||api.io.mi.com^'
+  - '@@||amdc.m.taobao.com^$important'
+  - '@@||amdc.alipay.com^$important'
+  - '@@||zz.bdstatic.com^$important'
+  - '@@||adashx.m.taobao.com^$important'
   - '||douyin.com^'
-  - '||api.assistant.miui.com^$important'
-  - '||d.douyin.com^$important'
-  - '||s5.ssl.qhimg.com^$important'
-  - '||hub5pr.sandai.net^$important'
-  - '||sf0.market.xiaomi.com^$important'
+  - '||api.assistant.miui.com^'
+  - '||d.douyin.com^'
+  - '||s5.ssl.qhimg.com^'
+  - '||hub5pr.sandai.net^'
+  - '||sf0.market.xiaomi.com^'
   - '@@||media.ptmi.gitv.tv^$important'
   - '@@||broker.mqtt.pandora.xiaomi.com^$important'
   - '@@||pandora.mi.com^$important'
@@ -167,9 +171,116 @@ user_rules:
   - '@@||gstat.ptmi.gitv.tv^$important'
   - '@@||data.mistat.xiaomi.com^$important'
   - '@@||image.box.xiaomi.com^$important'
-  - '@@||adashx.m.taobao.com^$important'
-  - '@@||amdc.alipay.com^$important'
-  - '@@||amdc.m.taobao.com^$important'
+  - '#酷喵影视广告规则'
+  - '||ipm.atm.cp31.ott.cibntv.net^'
+  - '||val.atm.cp31.ott.cibntv.net^'
+  - '||valf.atm.cp31.ott.cibntv.net^'
+  - '||vali.cp31.ott.cibntv.net^'
+  - '||vali.cp31.ott.cibntv.net.302.myalicdn.com^'
+  - '||abtest.alibaba.com^'
+  - '||ems.cp31.ott.cibntv.net^'
+  - '||youku-dtv.m.cn.miaozhen.com^'
+  - '||pl.cp31.ott.cibntv.net^'
+  - '||nbsdk-baichuan.alicdn.com^'
+  - '||acs.m.taobao.com^'
+  - '||wgo.mmstat.com^'
+  - '||proxy-mob-cld.alicdn.com^'
+  - '||image.9xsecndns.cn^'
+  - '||adashx4yt.m.taobao.com^'
+  - '||px.ucweb.com^'
+  - '||sjarvis.taobao.com^'
+  - '||ipm.atm.youku.com^'
+  - '||huichuan.sm.cn^'
+  - '||audid-api.taobao.com^'
+  - '||applog.uc.cn^'
+  - '||orange-dc.youku.com^'
+  - '||youku-acs.m.taobao.com^'
+  - '||acs4baichuan.m.taobao.com^'
+  - '||ykugc.cp31.ott.cibntv.net^'
+  - '||vali-dns.cp31.ott.cibntv.net^'
+  - '||heyi-acs.cp31.ott.cibntv.net^'
+  - '#小米遥控器'
+  - '||cnbj1.fds.api.xiaomi.co^'
+  - '#YouTube广告'
+  - /googleads.$~script,domain=~googleads.github.io
+  - /pagead/lvz?
+  - '||google.com/pagead/'
+  - '||static.doubleclick.net^$domain=youtube.com'
+  - '||youtube.com/get_midroll_'
+  - '||safebrowsing.googleapis-cn.com'
+  - '||doubleclick.net'
+  - '#秋风のとおり道 电报频道 https://t.me/AWAvenue'
+  - '||wxsnsdy.wxs.qq.com^'
+  - 127.0.0.1 wxsnsdy.wxs.qq.com
+  - '||wxa.wxs.qq.com^'
+  - 127.0.0.1 wxa.wxs.qq.com
+  - '||wxsnsdythumb.wxs.qq.com^'
+  - 127.0.0.1 wxsnsdythumb.wxs.qq.com
+  - '||is.snssdk.com^'
+  - '||i.snssdk.com^'
+  - '||p3-tt.byteimg.com^'
+  - '||success.ctobsnssdk.com^'
+  - '||sf16-static.i18n-pglstatp.com^'
+  - '||sf3-fe-tos.pglstatp-toutiao.com^'
+  - '||ad.zijieapi.com^'
+  - '||api-access.pangolin-sdk-toutiao.com^'
+  - '||mobads.baidu.com^'
+  - '||ad.qq.com^'
+  - '||ks.pull.yximgs.com^'
+  - '||open.e.kuaishou.com^'
+  - '||open.e.kuaishou.cn^'
+  - '||open.e.kuaishou^'
+  - '||open.kwaizt.com^'
+  - '||bd.pull.yximgs.com^'
+  - '||jstatic.3.cn^'
+  - '||p1-lm.adukwai.com^'
+  - '||p2-lm.adukwai.com^'
+  - '||p3-lm.adukwai.com^'
+  - '||p4-lm.adukwai.com^'
+  - '||p5-lm.adukwai.com^'
+  - '||m.jingxi.com^'
+  - '||chat1.jd.com^'
+  - 127.0.0.1 www.csjplatform.com
+  - '||www.csjplatform.com^'
+  - '||xlmzc.cnjp-exp.com^'
+  - '||lm10111.jtrincc.cn^'
+  - '||ali-ad.a.yximgs.com^'
+  - '||qqdata.ab.qq.com^'
+  - '||tx-ad.a.yximgs.com^'
+  - '||p1-lm.adkwai.com^'
+  - '||video-dsp.pddpic.com^'
+  - '||v1-lm.adukwai.com^'
+  - '||v2-lm.adukwai.com^'
+  - '||v3-lm.adukwai.com^'
+  - '||v4-lm.adukwai.com^'
+  - '||v5-lm.adukwai.com^'
+  - '||pgdt.ugdtimg.com^'
+  - '||tx-kmpaudio.pull.yximgs.com^'
+  - '||hmma.baidu.com^'
+  - '||apiyd.my91app.com^'
+  - '||open.kuaishouzt^'
+  - '||qzs.gdtimg.com^'
+  - '||sdkoptedge.chinanetcenter.com^'
+  - '||roi.soulapp.cn^'
+  - '||bd.pull.yximgs.com^'
+  - '||bd-adaptive.pull.yximgs.com^'
+  - '||bd-livemate.pull.yximgs.com^'
+  - '||bd-origin.pull.yximgs.com^'
+  - '||bd-pclivemate.pull.yximgs.com^'
+  - '||bd-proxy.pull.yximgs.com^'
+  - '||bd-rwk.pull.etoote.com^'
+  - '||httpdns.bcelive.com^'
+  - '||skdisplay.jd.com^'
+  - '||p9-be-pack-sign.pglstatp-toutiao.com^'
+  - '||v6-be-pack.pglstatp-toutiao.com^'
+  - '||log-api.pangolin-sdk-toutiao-b.com^'
+  - '||api-access.pangolin-sdk-toutiao-b.com^'
+  - '||pangolin-sdk-toutiao-b.com^'
+  - '||pig.pupuapi.com^'
+  - '||pglstatp-toutiao.com^'
+  - '||thumb.1010pic.com^'
+  - '||thumb2018.1010pic.com^'
+  - '||1010pic.com^'
   - ""
 dhcp:
   enabled: false
@@ -188,6 +299,36 @@ dhcp:
     lease_duration: 86400
     ra_slaac_only: false
     ra_allow_slaac: false
+filtering:
+  blocking_ipv4: ""
+  blocking_ipv6: ""
+  blocked_services:
+    schedule:
+      time_zone: Local
+    ids: []
+  protection_disabled_until: null
+  safe_search:
+    enabled: false
+    bing: true
+    duckduckgo: true
+    google: true
+    pixabay: true
+    yandex: true
+    youtube: true
+  blocking_mode: default
+  parental_block_host: family-block.dns.adguard.com
+  safebrowsing_block_host: standard-block.dns.adguard.com
+  rewrites: []
+  safebrowsing_cache_size: 1048576
+  safesearch_cache_size: 1048576
+  parental_cache_size: 1048576
+  cache_time: 30
+  filters_update_interval: 24
+  blocked_response_ttl: 10
+  filtering_enabled: true
+  parental_enabled: false
+  safebrowsing_enabled: false
+  protection_enabled: true
 clients:
   runtime_sources:
     whois: true
@@ -196,15 +337,16 @@ clients:
     dhcp: true
     hosts: true
   persistent: []
-log_file: ""
-log_max_backups: 0
-log_max_size: 100
-log_max_age: 3
-log_compress: false
-log_localtime: false
-verbose: false
+log:
+  file: ""
+  max_backups: 0
+  max_size: 100
+  max_age: 3
+  compress: false
+  local_time: false
+  verbose: false
 os:
   group: ""
   user: ""
   rlimit_nofile: 0
-schema_version: 14
+schema_version: 27
