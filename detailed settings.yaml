@@ -24,7 +24,6 @@ dns:
     - https://dns10.quad9.net/dns-query
     - 223.5.5.5
     - 119.29.29.29
-    - 114.114.114.114
     - 8.8.8.8
     - https://dns.alidns.com/dns-query
     - https://dns10.quad9.net/dns-query
@@ -47,11 +46,17 @@ dns:
     - 2620:fe::10
     - 2620:fe::fe:10
   fallback_dns: []
-  all_servers: false
+  all_servers: true
   fastest_addr: false
   fastest_timeout: 1s
   allowed_clients: []
-  disallowed_clients: []
+  disallowed_clients:
+    - 64.62.197.15
+    - 162.142.125.12
+    - 174.138.40.30
+    - 146.88.241.220
+    - 68.183.122.253
+    - 200.162.132.35
   blocked_hosts:
     - version.bind
     - id.server
@@ -65,10 +70,10 @@ dns:
   cache_optimistic: false
   bogus_nxdomain: []
   aaaa_disabled: false
-  enable_dnssec: true
+  enable_dnssec: false
   edns_client_subnet:
     custom_ip: ""
-    enabled: true
+    enabled: false
     use_custom: false
   max_goroutines: 300
   handle_ddr: true
@@ -149,6 +154,10 @@ filters:
     url: https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt
     name: CJX'sAnnoyance
     id: 1661490776
+  - enabled: true
+    url: https://raw.githubusercontent.com/banbendalao/ADgk/master/kill-baidu-ad.txt
+    name: 百度搜索结果内屏蔽百家号
+    id: 1697279163
 whitelist_filters: []
 user_rules:
   - '@@||api.io.mi.com^'
@@ -281,6 +290,7 @@ user_rules:
   - '||thumb.1010pic.com^'
   - '||thumb2018.1010pic.com^'
   - '||1010pic.com^'
+
   - ""
 dhcp:
   enabled: false
